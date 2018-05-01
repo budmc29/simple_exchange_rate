@@ -6,7 +6,7 @@ RSpec.describe ExchangeRate do
   end
 
   context 'with the default base currency' do
-    it 'returns the default rate' do
+    it 'returns the base rate' do
       expect(described_class.at(Date.today, 'EUR', 'EUR')).
         to eq(1.0)
     end
