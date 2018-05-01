@@ -2,7 +2,7 @@ module ExchangeRate
   class Database
     def self.all
       {
-        Date.today.to_s => {
+        '2018-05-01' => {
           'USD' => 1.2079
         }
       }
