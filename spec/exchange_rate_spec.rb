@@ -9,7 +9,7 @@ RSpec.describe ExchangeRate do
   before :each do
     allow(ExchangeRate::Database).to receive(:all).and_return(
       {
-        '2018-05-01' => {
+        valid_date => {
           'USD' => 1.2079
         }
       }
