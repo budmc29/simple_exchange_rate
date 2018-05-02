@@ -1,5 +1,8 @@
 module ExchangeRate
   class InvalidCurrency < Exception; end
+  class InvalidDate < Exception; end
+  class OutOfRangeDate < Exception; end
+
 
   INITIAL_BASE_CURRENCY = 'EUR'
   BASE_RATE = 1.0
@@ -40,24 +43,33 @@ module ExchangeRate
   ]
 
   class Currency
-    attr_accessor :base_rate, :convert_to, :date
+    attr_reader :date
+    attr_accessor :base_value, :convert_to
 
     def initialize(database)
       @database = database
     end
 
+    def date=(value)
+      @date = Date.iso8601(value)
+    rescue ArgumentError => _e
+      raise InvalidDate
+    end
+
     def rate
-      return BASE_RATE if @base_rate == @convert_to
+      return BASE_RATE if @base_value == @convert_to
 
       valid_input?
 
       for_date = @database.fetch(date.to_s)
       for_date.fetch(@convert_to)
+    rescue KeyError => _e
+      raise OutOfRangeDate
     end
 
     private
       def valid_input?
-        unless SUPPORTED_CURRENCIES.include?(@base_rate.upcase) &&
+        unless SUPPORTED_CURRENCIES.include?(@base_value.upcase) &&
           SUPPORTED_CURRENCIES.include?(@convert_to.upcase)
             raise InvalidCurrency
         end
