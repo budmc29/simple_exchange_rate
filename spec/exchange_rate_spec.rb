@@ -1,16 +1,28 @@
 require 'date'
 
 RSpec.describe ExchangeRate do
+  let(:base_currency) { 'EUR' }
+  let(:non_base_currency) { 'GBP' }
+  let(:valid_date) { '2018-05-01' }
+  let(:conversion_currency) { 'USD' }
+
   it 'has a version number' do
     expect(ExchangeRate::VERSION).not_to be nil
   end
 
-  context 'with the default base currency' do
-    let(:base_currency) { 'EUR' }
-    let(:non_base_currency) { 'GBP' }
-    let(:valid_date) { '2018-05-01' }
-    let(:conversion_currency) { 'USD' }
+  it 'requires valid base currency' do
+    expect {
+      described_class.at(valid_date, 'xx', conversion_currency)
+    }.to raise_error(ExchangeRate::InvalidCurrency)
+  end
 
+  it 'requires valid conversion currency' do
+    expect {
+      described_class.at(valid_date, base_currency, 'xx')
+    }.to raise_error(ExchangeRate::InvalidCurrency)
+  end
+
+  context 'with the default base currency' do
     it 'returns the base rate' do
       expect(described_class.at(valid_date, base_currency, base_currency)).
         to eq(1.0)
