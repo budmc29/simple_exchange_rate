@@ -44,25 +44,35 @@ module ExchangeRate
     ZA
   ]
 
-  def self.at(date, from_currency, to_currency)
-    from_currency = from_currency.upcase
-    to_currency = to_currency.upcase
+  class << self
+    def at(date, from_currency, to_currency)
+      raise InvalidCurrency unless valid_input?(from_currency, to_currency)
 
-    unless SUPPORTED_CURRENCIES.include?(from_currency) &&
-      SUPPORTED_CURRENCIES.include?(to_currency)
-        raise InvalidCurrency
+      date = Date.iso8601(date)
+
+      return BASE_RATE if from_currency == to_currency
+
+      for_date = all_rates.fetch(date.to_s)
+
+      raise OutOfRangeDate if for_date.nil?
+
+      for_date.fetch(to_currency)
+    rescue KeyError => _e
+      raise OutOfRangeDate
+    rescue ArgumentError => _e
+      raise InvalidDate
     end
 
-    date = Date.iso8601(date)
+    def all_rates
+      @all_rates ||= Database.all
+    end
 
-    currencies = Database.all
-
-    return BASE_RATE if from_currency == to_currency
-
-    currencies.fetch(date.to_s).fetch(to_currency)
-  rescue KeyError => _e
-    raise OutOfRangeDate
-  rescue ArgumentError => _e
-    raise InvalidDate
+    private
+      def valid_input?(from, to)
+        if SUPPORTED_CURRENCIES.include?(from.upcase) &&
+          SUPPORTED_CURRENCIES.include?(to.upcase)
+            true
+        end
+      end
   end
 end
