@@ -6,6 +6,16 @@ RSpec.describe ExchangeRate do
   let(:valid_date) { '2018-05-01' }
   let(:conversion_currency) { 'USD' }
 
+  before :each do
+    allow(ExchangeRate::Database).to receive(:all).and_return(
+      {
+        '2018-05-01' => {
+          'USD' => 1.2079
+        }
+      }
+    )
+  end
+
   it 'has a version number' do
     expect(ExchangeRate::VERSION).not_to be nil
   end
