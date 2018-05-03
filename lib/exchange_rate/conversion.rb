@@ -4,6 +4,7 @@ module ExchangeRate
   class InvalidCurrency < Exception; end
   class InvalidDate < Exception; end
   class OutOfRangeDate < Exception; end
+  class DatabaseError < Exception; end
 
   INITIAL_BASE_CURRENCY = 'EUR'
   BASE_RATE = 1.0
@@ -44,7 +45,7 @@ module ExchangeRate
   ]
 
   class Conversion
-    attr_reader :date, :base_value, :conversion_currency
+    attr_reader :date, :base_currency, :conversion_currency
 
     def initialize(database)
       @database = database
@@ -59,7 +60,7 @@ module ExchangeRate
     def base_currency=(value)
       raise InvalidCurrency unless valid_currency?(value)
 
-      @base_value = value
+      @base_currency = value
     end
 
     def conversion_currency=(value)
@@ -69,34 +70,53 @@ module ExchangeRate
     end
 
     def rate
-      return BASE_RATE if @base_value == @conversion_currency
+      return BASE_RATE if @base_currency == @conversion_currency
 
-      for_date = @database.fetch(date.to_s, nil)
+      raise OutOfRangeDate if rates_for_date.nil?
 
-      raise OutOfRangeDate if for_date.nil?
+      if @base_currency == INITIAL_BASE_CURRENCY
+        standard_rate
+      else
+        cross_rate
+      end
+    rescue KeyError
+      raise DatabaseError
+    end
 
-      rate = if INITIAL_BASE_CURRENCY != @base_value
-               if INITIAL_BASE_CURRENCY == @conversion_currency
-                 (1 / for_date.fetch(@base_value)).round(4)
-               else
-                 base_to_currency =  for_date.fetch(@conversion_currency)
-                 base_to_new_base = for_date.fetch(@base_value)
-
-                 (base_to_currency / base_to_new_base).round(4)
-               end
-
-             else
-               for_date.fetch(@conversion_currency, nil)
-             end
-
-      raise InvalidCurrency if rate.nil?
-
-      rate
+    def rates_for_date
+      @rates_for_date ||= @database.all.fetch(date.to_s, nil)
     end
 
     private
       def valid_currency?(value)
         return true if SUPPORTED_CURRENCIES.include?(value.to_s.upcase)
+      end
+
+      def standard_rate
+        rates_for_date.fetch(@conversion_currency, nil)
+      end
+
+      def converting_to_base_currency
+        INITIAL_BASE_CURRENCY == @conversion_currency
+      end
+
+      def inverse_of_base_currency_rate
+        (1 / rates_for_date.fetch(@base_currency)).round(4)
+      end
+
+      def calculate_cross_rate_through_mutual_rate
+        base_to_currency = rates_for_date.fetch(@conversion_currency)
+        base_to_new_base = rates_for_date.fetch(@base_currency)
+
+        (base_to_currency / base_to_new_base).round(4)
+      end
+
+      def cross_rate
+        if converting_to_base_currency
+          inverse_of_base_currency_rate
+        else
+          calculate_cross_rate_through_mutual_rate
+        end
       end
   end
 end

@@ -15,7 +15,7 @@ module ExchangeRate
     end
 
     def database
-      @database ||= Database.all
+      @database ||= Database.new
     end
   end
 end

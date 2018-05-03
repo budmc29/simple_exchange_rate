@@ -3,7 +3,7 @@ RSpec.describe ExchangeRate::Conversion do
 
   describe '#rate' do
     subject do
-      sub = described_class.new(StubDatabase.all)
+      sub = described_class.new(StubDatabase.new)
 
       sub.date = date
       sub.base_currency = base_currency
@@ -19,11 +19,12 @@ RSpec.describe ExchangeRate::Conversion do
     let(:date) { Date.today.to_s }
 
     class StubDatabase
-      def self.all
+      def all
         {
           Date.today.to_s => {
             'GBP' => 0.8804,
-            'USD' => 1.2007
+            'USD' => 1.2007,
+            'IDR' => 16762.27
           }
         }
       end
@@ -83,7 +84,7 @@ RSpec.describe ExchangeRate::Conversion do
       end
 
       describe 'and date not in the database' do
-        let(:date) { Date.new(2017) }
+        let(:date) { Date.today - 1 }
 
         it 'raises exception' do
           expect { subject }.to raise_error(ExchangeRate::OutOfRangeDate)
@@ -95,6 +96,16 @@ RSpec.describe ExchangeRate::Conversion do
       describe 'when converting to a currency other than default' do
         let(:base_currency) { 'GBP' }
         let(:non_base_to_conversion_rate) { 1.3638 }
+
+        it 'returns the correct rate' do
+          expect(subject).to eq(non_base_to_conversion_rate)
+        end
+      end
+
+      describe 'with a currency that has a big rate' do
+        let(:base_currency) { 'GBP' }
+        let(:conversion_currency) { 'IDR' }
+        let(:non_base_to_conversion_rate) { 19039.3798 }
 
         it 'returns the correct rate' do
           expect(subject).to eq(non_base_to_conversion_rate)

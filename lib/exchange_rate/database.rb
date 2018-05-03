@@ -1,9 +1,8 @@
 module ExchangeRate
   class Database
-    class << self
-      def all
-        {}
-      end
+    def all
+      {
+      }
     end
   end
 end
