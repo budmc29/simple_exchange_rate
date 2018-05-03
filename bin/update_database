@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/exchange_rate/database_updater'
+
+ExchangeRate::DatabaseUpdater.call
