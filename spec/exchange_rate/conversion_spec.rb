@@ -13,11 +13,10 @@ RSpec.describe ExchangeRate::Conversion do
     end
 
     let(:base_currency) { 'EUR' }
-    let(:base_rate) {  1.2007 }
+    let(:neutral_rate) { 1.0 }
     let(:conversion_currency) { 'USD' }
+    let(:base_to_conversion_rate) {  1.2007 }
     let(:date) { Date.today.to_s }
-    let(:non_base_currency) { 'GBP' }
-    let(:non_base_rate) { 1.1196 }
 
     class StubDatabase
       def self.all
@@ -75,12 +74,12 @@ RSpec.describe ExchangeRate::Conversion do
         let(:conversion_currency) { base_currency }
 
         it 'returns neutral rate' do
-          expect(subject).to eq(1.0)
+          expect(subject).to eq(neutral_rate)
         end
       end
 
       it 'returns a valid rate' do
-        expect(subject).to eq(base_rate)
+        expect(subject).to eq(base_to_conversion_rate)
       end
 
       describe 'and date not in the database' do
@@ -93,10 +92,24 @@ RSpec.describe ExchangeRate::Conversion do
     end
 
     context 'with non default base currency' do
-      let(:base_currency) { non_base_currency }
+      describe 'when converting to a currency other than default' do
+        let(:base_currency) { 'GBP' }
+        let(:non_base_to_conversion_rate) { 1.3638 }
 
-      xit 'returns the correct rate' do
-        expect(subject).to eq(non_base_rate)
+        it 'returns the correct rate' do
+          expect(subject).to eq(non_base_to_conversion_rate)
+        end
+      end
+
+      describe 'when converting to base currency' do
+        let(:base_currency) { 'USD' }
+        let(:conversion_currency) { 'EUR' }
+        let(:new_base_to_default_base_rate) { 0.8328 }
+
+        it 'returns the correct rate' do
+          expect { subject }.to_not raise_error
+          expect(subject).to eq(new_base_to_default_base_rate)
+        end
       end
     end
   end

@@ -75,7 +75,19 @@ module ExchangeRate
 
       raise OutOfRangeDate if for_date.nil?
 
-      rate = for_date.fetch(@conversion_currency, nil)
+      rate = if INITIAL_BASE_CURRENCY != @base_value
+               if INITIAL_BASE_CURRENCY == @conversion_currency
+                 (1 / for_date.fetch(@base_value)).round(4)
+               else
+                 base_to_currency =  for_date.fetch(@conversion_currency)
+                 base_to_new_base = for_date.fetch(@base_value)
+
+                 (base_to_currency / base_to_new_base).round(4)
+               end
+
+             else
+               for_date.fetch(@conversion_currency, nil)
+             end
 
       raise InvalidCurrency if rate.nil?
 
