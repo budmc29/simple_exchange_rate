@@ -8,6 +8,7 @@ module ExchangeRate
 
   INITIAL_BASE_CURRENCY = 'EUR'
   BASE_RATE = 1.0
+  PRECISION_NUMBER = 4
   SUPPORTED_CURRENCIES = %w[
     AUD
     BGN
@@ -101,14 +102,14 @@ module ExchangeRate
       end
 
       def inverse_of_base_currency_rate
-        (1 / rates_for_date.fetch(@base_currency).to_f).round(4)
+        (1 / rates_for_date.fetch(@base_currency).to_f).round(PRECISION_NUMBER)
       end
 
       def calculate_cross_rate_through_mutual_rate
         base_to_currency = rates_for_date.fetch(@conversion_currency).to_f
         base_to_new_base = rates_for_date.fetch(@base_currency).to_f
 
-        (base_to_currency / base_to_new_base).round(4)
+        (base_to_currency / base_to_new_base).round(PRECISION_NUMBER)
       end
 
       def cross_rate

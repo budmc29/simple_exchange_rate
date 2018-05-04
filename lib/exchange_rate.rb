@@ -14,8 +14,9 @@ module ExchangeRate
       conversion.rate
     end
 
-    def database
-      @database ||= Database.new
-    end
+    private
+      def database
+        @database ||= Database.new
+      end
   end
 end

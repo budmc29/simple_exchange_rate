@@ -2,8 +2,22 @@ require 'spec_helper'
 
 RSpec.describe ExchangeRate::Conversion do
   describe '#rate' do
+    let(:database) { StubDatabase.new }
+
+    class StubDatabase
+      def all
+        {
+          Date.today.to_s => {
+            'GBP' => '0.8804',
+            'USD' => '1.2007',
+            'IDR' => '16762.27'
+          }
+        }
+      end
+    end
+
     subject do
-      sub = described_class.new(StubDatabase.new)
+      sub = described_class.new(database)
 
       sub.date = date
       sub.base_currency = base_currency
@@ -18,15 +32,13 @@ RSpec.describe ExchangeRate::Conversion do
     let(:base_to_conversion_rate) {  1.2007 }
     let(:date) { Date.today.to_s }
 
-    class StubDatabase
-      def all
-        {
-          Date.today.to_s => {
-            'GBP' => '0.8804',
-            'USD' => '1.2007',
-            'IDR' => '16762.27'
-          }
-        }
+    context 'with database failure' do
+      let(:database) { double('database') }
+
+      it 'raises database error' do
+        allow(database).to receive(:all).and_raise(KeyError)
+
+        expect { subject }.to raise_error(ExchangeRate::DatabaseError)
       end
     end
 
@@ -43,14 +55,6 @@ RSpec.describe ExchangeRate::Conversion do
 
       it do
         expect { subject }.to raise_error(ExchangeRate::InvalidCurrency)
-      end
-    end
-
-    context 'with invalid date' do
-      let(:date) { 'xx' }
-
-      it do
-        expect { subject }.to raise_error(ExchangeRate::InvalidDate)
       end
     end
 

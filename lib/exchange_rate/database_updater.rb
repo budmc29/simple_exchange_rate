@@ -1,6 +1,6 @@
 require 'open-uri'
 
-require 'exchange_rate/database'
+require_relative 'database'
 
 module ExchangeRate
   class DatabaseUpdater
