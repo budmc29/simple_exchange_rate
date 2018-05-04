@@ -22,9 +22,9 @@ RSpec.describe ExchangeRate::Conversion do
       def all
         {
           Date.today.to_s => {
-            'GBP' => 0.8804,
-            'USD' => 1.2007,
-            'IDR' => 16762.27
+            'GBP' => '0.8804',
+            'USD' => '1.2007',
+            'IDR' => '16762.27'
           }
         }
       end

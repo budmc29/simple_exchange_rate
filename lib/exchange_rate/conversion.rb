@@ -93,7 +93,7 @@ module ExchangeRate
       end
 
       def standard_rate
-        rates_for_date.fetch(@conversion_currency, nil)
+        rates_for_date.fetch(@conversion_currency, nil).to_f
       end
 
       def converting_to_base_currency
@@ -101,12 +101,12 @@ module ExchangeRate
       end
 
       def inverse_of_base_currency_rate
-        (1 / rates_for_date.fetch(@base_currency)).round(4)
+        (1 / rates_for_date.fetch(@base_currency).to_f).round(4)
       end
 
       def calculate_cross_rate_through_mutual_rate
-        base_to_currency = rates_for_date.fetch(@conversion_currency)
-        base_to_new_base = rates_for_date.fetch(@base_currency)
+        base_to_currency = rates_for_date.fetch(@conversion_currency).to_f
+        base_to_new_base = rates_for_date.fetch(@base_currency).to_f
 
         (base_to_currency / base_to_new_base).round(4)
       end
