@@ -12,23 +12,27 @@ module ExchangeRate
     end
 
     def all
-      rates_by_day = @file.xpath("//Cube[not(@*)]").xpath("Cube")
+      daily_rates.reduce({}) do |all_rates, daily_rate|
+        day = daily_rate.attributes['time'].value
 
-      all_rates = {}
-      rates_by_day.each do |rate|
-        day = rate.attributes['time'].value
+        all_rates[day] = rates_details(daily_rate)
 
-        currencies = rate.xpath("Cube")
+        all_rates
+      end
+    end
 
-        day_currencies = {}
-        currencies.each do |currency|
-          day_currencies[currency[:currency]] = currency[:rate]
-        end
-
-        all_rates[day] = day_currencies
+    private
+      def daily_rates
+        @file.xpath("//Cube[not(@*)]").xpath("Cube")
       end
 
-      all_rates
-    end
+      def rates_details(rate)
+        entries = rate.xpath("Cube")
+
+        entries.reduce({}) do |all_entries, entry|
+          all_entries[entry[:currency]] = entry[:rate]
+          all_entries
+        end
+      end
   end
 end
