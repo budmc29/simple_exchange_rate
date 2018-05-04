@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["budmc29"]
   spec.email         = ["chirica.mugurel@gmail.com"]
 
-  spec.summary       = %q{}
-  spec.description   = %q{}
-  spec.homepage      = ""
+  spec.summary       = %q{FreeAgent Exchange Rate Test}
+  spec.description   = %q{This is my take on FreeAgent_Coding_Test_Jan18}
+  spec.homepage      = "http://mugur-chirica.com"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
@@ -25,4 +25,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "pry-byebug"
+
+  spec.add_dependency('nokogiri', '>= 1.8.2')
 end

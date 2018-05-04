@@ -1,9 +1,10 @@
 require 'open-uri'
 
+require 'exchange_rate/database'
+
 module ExchangeRate
   class DatabaseUpdater
     API_URL = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml"
-    DATABASE_FILE_PATH = File.expand_path('../../../db', __FILE__)
 
     def self.call
       online_file = open(URI(API_URL))
