@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 RSpec.describe ExchangeRate::Database do
   describe '#all' do
     subject { described_class.new(stub_file) }

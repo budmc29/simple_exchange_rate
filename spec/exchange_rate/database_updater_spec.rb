@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 require_relative '../../lib/exchange_rate/database_updater'
 
 RSpec.describe ExchangeRate::DatabaseUpdater do

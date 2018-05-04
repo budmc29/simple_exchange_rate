@@ -1,6 +1,6 @@
-RSpec.describe ExchangeRate::Conversion do
-  let(:database) { ExchangeRate::Database }
+require 'spec_helper'
 
+RSpec.describe ExchangeRate::Conversion do
   describe '#rate' do
     subject do
       sub = described_class.new(StubDatabase.new)
