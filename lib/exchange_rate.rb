@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'exchange_rate/version'
 require 'exchange_rate/database'
 require 'exchange_rate/conversion'
@@ -15,8 +17,9 @@ module ExchangeRate
     end
 
     private
-      def database
-        @database ||= Database.new
-      end
+
+    def database
+      @database ||= Database.new
+    end
   end
 end

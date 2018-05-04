@@ -1,20 +1,22 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
+
+class StubDatabase
+  def all
+    {
+      Date.today.to_s => {
+        'GBP' => '0.8804',
+        'USD' => '1.2007',
+        'IDR' => '16762.27'
+      }
+    }
+  end
+end
 
 RSpec.describe ExchangeRate::Conversion do
   describe '#rate' do
     let(:database) { StubDatabase.new }
-
-    class StubDatabase
-      def all
-        {
-          Date.today.to_s => {
-            'GBP' => '0.8804',
-            'USD' => '1.2007',
-            'IDR' => '16762.27'
-          }
-        }
-      end
-    end
 
     subject do
       sub = described_class.new(database)
@@ -29,7 +31,7 @@ RSpec.describe ExchangeRate::Conversion do
     let(:base_currency) { 'EUR' }
     let(:neutral_rate) { 1.0 }
     let(:conversion_currency) { 'USD' }
-    let(:base_to_conversion_rate) {  1.2007 }
+    let(:base_to_conversion_rate) { 1.2007 }
     let(:date) { Date.today.to_s }
 
     context 'with database failure' do
@@ -109,7 +111,7 @@ RSpec.describe ExchangeRate::Conversion do
       describe 'with a currency that has a big rate' do
         let(:base_currency) { 'GBP' }
         let(:conversion_currency) { 'IDR' }
-        let(:non_base_to_conversion_rate) { 19039.3798 }
+        let(:non_base_to_conversion_rate) { 19_039.3798 }
 
         it 'returns the correct rate' do
           expect(subject).to eq(non_base_to_conversion_rate)

@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'nokogiri'
 
 module ExchangeRate
-  DATABASE_FILE_PATH = File.expand_path('../../../db', __FILE__)
+  DATABASE_FILE_PATH = File.expand_path('../../db', __dir__)
   DATABASE_FILE_NAME = 'exchange_rate.xml'
   DATABASE_FILE = DATABASE_FILE_PATH + '/' + DATABASE_FILE_NAME
 
@@ -22,17 +24,18 @@ module ExchangeRate
     end
 
     private
-      def daily_rates
-        @file.xpath("//Cube[not(@*)]").xpath("Cube")
-      end
 
-      def rates_details(rate)
-        entries = rate.xpath("Cube")
+    def daily_rates
+      @file.xpath('//Cube[not(@*)]').xpath('Cube')
+    end
 
-        entries.reduce({}) do |all_entries, entry|
-          all_entries[entry[:currency]] = entry[:rate]
-          all_entries
-        end
+    def rates_details(rate)
+      entries = rate.xpath('Cube')
+
+      entries.reduce({}) do |all_entries, entry|
+        all_entries[entry[:currency]] = entry[:rate]
+        all_entries
       end
+    end
   end
 end

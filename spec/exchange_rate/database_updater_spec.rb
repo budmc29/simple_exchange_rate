@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 require_relative '../../lib/exchange_rate/database_updater'
@@ -14,7 +16,7 @@ RSpec.describe ExchangeRate::DatabaseUpdater do
       expect(file).to receive(:write)
       expect(file).to receive(:close)
 
-      expect { described_class.call}.to_not raise_error
+      expect { described_class.call }.to_not raise_error
     end
   end
 end

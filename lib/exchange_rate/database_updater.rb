@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 require 'open-uri'
 
 require_relative 'database'
 
 module ExchangeRate
   class DatabaseUpdater
-    API_URL = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml"
+    API_URL = 'http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml'
 
     def self.call
-      online_file = open(URI(API_URL))
+      online_file = OpenURI.open_uri(URI(API_URL))
 
       file_path = DATABASE_FILE_PATH + '/exchange_rate.xml'
 

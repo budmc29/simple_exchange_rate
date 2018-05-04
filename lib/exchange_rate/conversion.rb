@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'date'
 
 module ExchangeRate
-  class InvalidCurrency < Exception; end
-  class InvalidDate < Exception; end
-  class OutOfRangeDate < Exception; end
-  class DatabaseError < Exception; end
+  class InvalidCurrency < RuntimeError; end
+  class InvalidDate < RuntimeError; end
+  class OutOfRangeDate < RuntimeError; end
+  class DatabaseError < RuntimeError; end
 
   INITIAL_BASE_CURRENCY = 'EUR'
   BASE_RATE = 1.0
@@ -43,7 +45,7 @@ module ExchangeRate
     TRY
     USD
     ZA
-  ]
+  ].freeze
 
   class Conversion
     attr_reader :date, :base_currency, :conversion_currency
@@ -89,35 +91,36 @@ module ExchangeRate
     end
 
     private
-      def valid_currency?(value)
-        return true if SUPPORTED_CURRENCIES.include?(value.to_s.upcase)
-      end
 
-      def standard_rate
-        rates_for_date.fetch(@conversion_currency, nil).to_f
-      end
+    def valid_currency?(value)
+      return true if SUPPORTED_CURRENCIES.include?(value.to_s.upcase)
+    end
 
-      def converting_to_base_currency
-        INITIAL_BASE_CURRENCY == @conversion_currency
-      end
+    def standard_rate
+      rates_for_date.fetch(@conversion_currency, nil).to_f
+    end
 
-      def inverse_of_base_currency_rate
-        (1 / rates_for_date.fetch(@base_currency).to_f).round(PRECISION_NUMBER)
-      end
+    def converting_to_base_currency
+      INITIAL_BASE_CURRENCY == @conversion_currency
+    end
 
-      def calculate_cross_rate_through_mutual_rate
-        base_to_currency = rates_for_date.fetch(@conversion_currency).to_f
-        base_to_new_base = rates_for_date.fetch(@base_currency).to_f
+    def inverse_of_base_currency_rate
+      (1 / rates_for_date.fetch(@base_currency).to_f).round(PRECISION_NUMBER)
+    end
 
-        (base_to_currency / base_to_new_base).round(PRECISION_NUMBER)
-      end
+    def calculate_cross_rate_through_mutual_rate
+      base_to_currency = rates_for_date.fetch(@conversion_currency).to_f
+      base_to_new_base = rates_for_date.fetch(@base_currency).to_f
 
-      def cross_rate
-        if converting_to_base_currency
-          inverse_of_base_currency_rate
-        else
-          calculate_cross_rate_through_mutual_rate
-        end
+      (base_to_currency / base_to_new_base).round(PRECISION_NUMBER)
+    end
+
+    def cross_rate
+      if converting_to_base_currency
+        inverse_of_base_currency_rate
+      else
+        calculate_cross_rate_through_mutual_rate
       end
+    end
   end
 end
