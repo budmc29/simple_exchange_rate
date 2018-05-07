@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['budmc29']
   spec.email         = ['chirica.mugurel@gmail.com']
 
-  spec.summary       = %q{Exchange Rate Test}
-  spec.description   = %q{This is my take on implementing an Exchange Rate as per the requirements}
+  spec.summary       = %q{Exchange Rate}
+  spec.description   = %q{An exercise take on a simple exchange rate library}
   spec.homepage      = 'http://mugur-chirica.com'
   spec.license       = 'MIT'
 
