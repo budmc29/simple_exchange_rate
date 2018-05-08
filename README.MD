@@ -1,6 +1,6 @@
 # Simple Exchange Rate
 
-Simple exchange rate library using 'www.ecb.europa.eu' as an API and XML as a file store.
+Simple exchange rate library using `www.ecb.europa.eu` as an API and XML as a file store.  
 Just for fun and profit.
 
 ## Installation
@@ -35,7 +35,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/budmc29/test.
+Bug reports and pull requests are welcome on GitHub at https://github.com/budmc29/simple_exchange_rate.
 
 ## License
 
