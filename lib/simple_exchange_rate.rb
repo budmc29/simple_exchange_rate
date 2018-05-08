@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'exchange_rate/version'
-require 'exchange_rate/database'
-require 'exchange_rate/conversion'
+require 'simple_exchange_rate/version'
+require 'simple_exchange_rate/database'
+require 'simple_exchange_rate/conversion'
 
-module ExchangeRate
+module SimpleExchangeRate
   class << self
     def at(date, base_currency, conversion_currency)
       conversion = self::Conversion.new(database)

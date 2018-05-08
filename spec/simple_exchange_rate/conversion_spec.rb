@@ -14,7 +14,7 @@ class StubDatabase
   end
 end
 
-RSpec.describe ExchangeRate::Conversion do
+RSpec.describe SimpleExchangeRate::Conversion do
   describe '#rate' do
     let(:database) { StubDatabase.new }
 
@@ -40,7 +40,7 @@ RSpec.describe ExchangeRate::Conversion do
       it 'raises database error' do
         allow(database).to receive(:all).and_raise(KeyError)
 
-        expect { subject }.to raise_error(ExchangeRate::DatabaseError)
+        expect { subject }.to raise_error(SimpleExchangeRate::DatabaseError)
       end
     end
 
@@ -48,7 +48,7 @@ RSpec.describe ExchangeRate::Conversion do
       let(:base_currency) { 'xx' }
 
       it do
-        expect { subject }.to raise_error(ExchangeRate::InvalidCurrency)
+        expect { subject }.to raise_error(SimpleExchangeRate::InvalidCurrency)
       end
     end
 
@@ -56,7 +56,7 @@ RSpec.describe ExchangeRate::Conversion do
       let(:conversion_currency) { 'xx' }
 
       it do
-        expect { subject }.to raise_error(ExchangeRate::InvalidCurrency)
+        expect { subject }.to raise_error(SimpleExchangeRate::InvalidCurrency)
       end
     end
 
@@ -64,7 +64,7 @@ RSpec.describe ExchangeRate::Conversion do
       let(:date) { 'xx' }
 
       it do
-        expect { subject }.to raise_error(ExchangeRate::InvalidDate)
+        expect { subject }.to raise_error(SimpleExchangeRate::InvalidDate)
       end
     end
 
@@ -72,7 +72,7 @@ RSpec.describe ExchangeRate::Conversion do
       let(:date) { '01-05-2018' }
 
       it do
-        expect { subject }.to raise_error(ExchangeRate::InvalidDate)
+        expect { subject }.to raise_error(SimpleExchangeRate::InvalidDate)
       end
     end
 
@@ -93,7 +93,7 @@ RSpec.describe ExchangeRate::Conversion do
         let(:date) { Date.today - 1 }
 
         it 'raises exception' do
-          expect { subject }.to raise_error(ExchangeRate::OutOfRangeDate)
+          expect { subject }.to raise_error(SimpleExchangeRate::OutOfRangeDate)
         end
       end
     end

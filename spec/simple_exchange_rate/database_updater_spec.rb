@@ -2,9 +2,9 @@
 
 require 'spec_helper'
 
-require_relative '../../lib/exchange_rate/database_updater'
+require_relative '../../lib/simple_exchange_rate/database_updater'
 
-RSpec.describe ExchangeRate::DatabaseUpdater do
+RSpec.describe SimpleExchangeRate::DatabaseUpdater do
   describe '.call' do
     it 'fetches the online xml and saves it to a file' do
       online_file = double('online_file', read: 'body')

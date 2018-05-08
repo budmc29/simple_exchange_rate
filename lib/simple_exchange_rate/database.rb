@@ -2,9 +2,9 @@
 
 require 'nokogiri'
 
-module ExchangeRate
+module SimpleExchangeRate
   DATABASE_FILE_PATH = File.expand_path('../../db', __dir__)
-  DATABASE_FILE_NAME = 'exchange_rate.xml'
+  DATABASE_FILE_NAME = 'exchange_rates.xml'
   DATABASE_FILE = DATABASE_FILE_PATH + '/' + DATABASE_FILE_NAME
 
   class Database

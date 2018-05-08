@@ -2,7 +2,7 @@
 
 require 'date'
 
-module ExchangeRate
+module SimpleExchangeRate
   class InvalidCurrency < RuntimeError; end
   class InvalidDate < RuntimeError; end
   class OutOfRangeDate < RuntimeError; end

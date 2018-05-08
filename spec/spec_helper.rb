@@ -4,7 +4,7 @@ require 'simplecov'
 SimpleCov.start
 
 require 'bundler/setup'
-require 'exchange_rate'
+require 'simple_exchange_rate'
 
 RSpec.configure do |config|
   config.example_status_persistence_file_path = '.rspec_status'

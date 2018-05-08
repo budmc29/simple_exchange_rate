@@ -1,4 +1,4 @@
-# Exchange Rate
+# Simple Exchange Rate
 
 Simple exchange rate library using 'www.ecb.europa.eu' as an API and XML as a file store.
 Just for fun and profit.
@@ -8,7 +8,7 @@ Just for fun and profit.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'exchange_rate'
+gem 'simple_exchange_rate'
 ```
 
 And then execute:
@@ -17,14 +17,14 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install exchange_rate
+    $ gem install simple_exchange_rate
 
 ## Usage
 
 ```ruby
-require 'exchange_rate'
+require 'simple_exchange_rate'
 
-ExchangeRate.at(Date.today, 'USD', 'GBP')
+SimpleExchangeRate.at(Date.today, 'USD', 'GBP')
 ```
 
 ## Development

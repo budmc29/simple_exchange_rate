@@ -2,15 +2,15 @@
 
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'exchange_rate/version'
+require 'simple_exchange_rate/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'exchange_rate'
-  spec.version       = ExchangeRate::VERSION
+  spec.name          = 'simple_exchange_rate'
+  spec.version       = SimpleExchangeRate::VERSION
   spec.authors       = ['budmc29']
   spec.email         = ['chirica.mugurel@gmail.com']
 
-  spec.summary       = %q{Exchange Rate}
+  spec.summary       = %q{Simple Exchange Rate}
   spec.description   = %q{An exercise take on a simple exchange rate library}
   spec.homepage      = 'http://mugur-chirica.com'
   spec.license       = 'MIT'
