@@ -2,8 +2,6 @@
 
 require 'open-uri'
 
-require_relative 'database'
-
 module SimpleExchangeRate
   class DatabaseUpdater
     API_URL = 'http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml'

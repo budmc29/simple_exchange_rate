@@ -2,6 +2,7 @@
 
 require 'simple_exchange_rate/version'
 require 'simple_exchange_rate/database'
+require 'simple_exchange_rate/database_updater'
 require 'simple_exchange_rate/conversion'
 
 module SimpleExchangeRate
